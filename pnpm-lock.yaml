@@ -6,7 +6,7 @@ settings:
 
 overrides:
   '@mysten/dapp-kit': 0.19.2
-  '@mysten/sui': 1.40.0
+  '@mysten/sui': 1.43.0
   '@mysten/wallet-standard': 0.19.0
 
 importers:
@@ -29,8 +29,8 @@ importers:
         specifier: 0.19.2
         version: 0.19.2(@tanstack/react-query@5.90.5(react@19.2.0))(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
       '@mysten/sui':
-        specifier: 1.40.0
-        version: 1.40.0(typescript@5.9.3)
+        specifier: 1.43.0
+        version: 1.43.0(typescript@5.9.3)
       '@mysten/wallet-standard':
         specifier: 0.19.0
         version: 0.19.0(typescript@5.9.3)
@@ -601,8 +601,8 @@ packages:
   '@microsoft/clarity@1.0.0':
     resolution: {integrity: sha512-2QY6SmXnqRj6dWhNY8NYCN3e53j4zCFebH4wGnNhdGV1mqAsQwql2fT0w8TISxCvwwfVp8idsWLIdrRHOms1PQ==}
 
-  '@mysten/bcs@1.8.0':
-    resolution: {integrity: sha512-bDoLN1nN+XPONsvpNyNyqYHndM3PKWS419GLeRnbLoWyNm4bnyD1X4luEpJLLDq400hBuXiCan4RWjofvyTUIQ==}
+  '@mysten/bcs@1.9.0':
+    resolution: {integrity: sha512-tXXcDbWVbT/+aqAdVdCLwzz50VzSVlv8paEWnrFVpe53pp1YaykcsGW6WcJSYk/rtdw7c21r/np/N5Kf7ALm3Q==}
 
   '@mysten/dapp-kit@0.19.2':
     resolution: {integrity: sha512-iMQAwWRTtEUg06MYtYjSmFJmvF+XoVK+8v6Y+jdxWd7zgdgJiK70k95aq0VmxjHZM4e+IXPOzGl6XpMPUZDERA==}
@@ -613,8 +613,8 @@ packages:
   '@mysten/slush-wallet@0.2.3':
     resolution: {integrity: sha512-eZJohIj1PCO7BCORkwu35thAdj7q9P/0PwxKoUjRvTi8H2mys9IMnI3z+wCv63RS2ifk/eNTIlTJJLPlbKUcdw==}
 
-  '@mysten/sui@1.40.0':
-    resolution: {integrity: sha512-1MDF68v2mQIE1YEpPfyX++Jwat2JyeJM0htZKmKBqLghAvnbSgxUydogx+0b7jKn+Q2XpbvWhQlXEbUHOBTZQQ==}
+  '@mysten/sui@1.43.0':
+    resolution: {integrity: sha512-UvfzuuU0pmWcWX9PkbgG/PunqnhUHr2/dhpuT4xL9K+bSnQbusR4rl4hHE2j3fMzcj3M7RX6+KELB+Hx2mztgg==}
     engines: {node: '>=18'}
 
   '@mysten/utils@0.2.0':
@@ -682,6 +682,10 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
+
+  '@noble/curves@1.9.4':
+    resolution: {integrity: sha512-2bKONnuM53lINoDrSmK8qP8W271ms7pygDhZt4SiLOoLwBtoHqeCFi6RG42V8zd3mLHuJFhU/Bmaqo4nX0/kBw==}
+    engines: {node: ^14.21.3 || >=16}
 
   '@noble/curves@1.9.7':
     resolution: {integrity: sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw==}
@@ -907,6 +911,15 @@ packages:
     resolution: {integrity: sha512-mrZOev24EDhnefmnZX7WVVT7v+r9LttPRqf54ONvj6re4XMF7wFTpK2tLJi4XHB7fFp/6xhYbgRel8YV7gQiyA==}
     peerDependencies:
       '@opentelemetry/api': ^1.8
+
+  '@protobuf-ts/grpcweb-transport@2.11.1':
+    resolution: {integrity: sha512-1W4utDdvOB+RHMFQ0soL4JdnxjXV+ddeGIUg08DvZrA8Ms6k5NN6GBFU2oHZdTOcJVpPrDJ02RJlqtaoCMNBtw==}
+
+  '@protobuf-ts/runtime-rpc@2.11.1':
+    resolution: {integrity: sha512-4CqqUmNA+/uMz00+d3CYKgElXO9VrEbucjnBFEjqI4GuDrEQ32MaI3q+9qPBvIGOlL4PmHXrzM32vBPWRhQKWQ==}
+
+  '@protobuf-ts/runtime@2.11.1':
+    resolution: {integrity: sha512-KuDaT1IfHkugM2pyz+FwiY80ejWrkH1pAtOBOZFuR6SXEFTsnb/jiQWQ1rCIrcKx2BtyxnxW6BWwsVSA/Ie+WQ==}
 
   '@pythnetwork/hermes-client@2.0.0':
     resolution: {integrity: sha512-8ZbCrO5NSlsu1zauIJjZv0sPR3qF9uzgCpBpAPSBGBjwKP0T3TdIRfuSzf9mpzrqf+b7QUqNVNLWZqgN7nlREw==}
@@ -4415,7 +4428,7 @@ snapshots:
 
   '@cetusprotocol/aggregator-sdk@1.4.1(axios@1.12.2)(typescript@5.9.3)':
     dependencies:
-      '@mysten/sui': 1.40.0(typescript@5.9.3)
+      '@mysten/sui': 1.43.0(typescript@5.9.3)
       '@pythnetwork/pyth-sui-js': 2.3.0(axios@1.12.2)(typescript@5.9.3)
       bip39: 3.1.0
       dotenv: 16.6.1
@@ -4679,7 +4692,7 @@ snapshots:
 
   '@microsoft/clarity@1.0.0': {}
 
-  '@mysten/bcs@1.8.0':
+  '@mysten/bcs@1.9.0':
     dependencies:
       '@mysten/utils': 0.2.0
       '@scure/base': 1.2.6
@@ -4687,7 +4700,7 @@ snapshots:
   '@mysten/dapp-kit@0.19.2(@tanstack/react-query@5.90.5(react@19.2.0))(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)':
     dependencies:
       '@mysten/slush-wallet': 0.2.3(typescript@5.9.3)
-      '@mysten/sui': 1.40.0(typescript@5.9.3)
+      '@mysten/sui': 1.43.0(typescript@5.9.3)
       '@mysten/utils': 0.2.0
       '@mysten/wallet-standard': 0.19.0(typescript@5.9.3)
       '@radix-ui/react-dialog': 1.1.15(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -4712,7 +4725,7 @@ snapshots:
 
   '@mysten/slush-wallet@0.2.3(typescript@5.9.3)':
     dependencies:
-      '@mysten/sui': 1.40.0(typescript@5.9.3)
+      '@mysten/sui': 1.43.0(typescript@5.9.3)
       '@mysten/utils': 0.2.0
       '@mysten/wallet-standard': 0.19.0(typescript@5.9.3)
       '@mysten/window-wallet-core': 0.1.0
@@ -4723,13 +4736,16 @@ snapshots:
       - '@gql.tada/vue-support'
       - typescript
 
-  '@mysten/sui@1.40.0(typescript@5.9.3)':
+  '@mysten/sui@1.43.0(typescript@5.9.3)':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.11.0)
-      '@mysten/bcs': 1.8.0
+      '@mysten/bcs': 1.9.0
       '@mysten/utils': 0.2.0
-      '@noble/curves': 1.9.7
+      '@noble/curves': 1.9.4
       '@noble/hashes': 1.8.0
+      '@protobuf-ts/grpcweb-transport': 2.11.1
+      '@protobuf-ts/runtime': 2.11.1
+      '@protobuf-ts/runtime-rpc': 2.11.1
       '@scure/base': 1.2.6
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
@@ -4748,7 +4764,7 @@ snapshots:
 
   '@mysten/wallet-standard@0.19.0(typescript@5.9.3)':
     dependencies:
-      '@mysten/sui': 1.40.0(typescript@5.9.3)
+      '@mysten/sui': 1.43.0(typescript@5.9.3)
       '@wallet-standard/core': 1.1.1
     transitivePeerDependencies:
       - '@gql.tada/svelte-support'
@@ -4797,6 +4813,10 @@ snapshots:
 
   '@next/swc-win32-x64-msvc@15.5.6':
     optional: true
+
+  '@noble/curves@1.9.4':
+    dependencies:
+      '@noble/hashes': 1.8.0
 
   '@noble/curves@1.9.7':
     dependencies:
@@ -5072,6 +5092,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@protobuf-ts/grpcweb-transport@2.11.1':
+    dependencies:
+      '@protobuf-ts/runtime': 2.11.1
+      '@protobuf-ts/runtime-rpc': 2.11.1
+
+  '@protobuf-ts/runtime-rpc@2.11.1':
+    dependencies:
+      '@protobuf-ts/runtime': 2.11.1
+
+  '@protobuf-ts/runtime@2.11.1': {}
+
   '@pythnetwork/hermes-client@2.0.0(axios@1.12.2)':
     dependencies:
       '@zodios/core': 10.9.6(axios@1.12.2)(zod@3.25.76)
@@ -5082,7 +5113,7 @@ snapshots:
 
   '@pythnetwork/pyth-sui-js@2.3.0(axios@1.12.2)(typescript@5.9.3)':
     dependencies:
-      '@mysten/sui': 1.40.0(typescript@5.9.3)
+      '@mysten/sui': 1.43.0(typescript@5.9.3)
       '@pythnetwork/hermes-client': 2.0.0(axios@1.12.2)
       buffer: 6.0.3
     transitivePeerDependencies:
