@@ -153,7 +153,7 @@ const TokenAmountInput = <T extends Coin>({
       {error && (
         <div
           className={cn(
-            'mb-2 flex items-center gap-1.5 text-xs font-medium tabular-nums text-[#FF5C5A] sm:mb-3 sm:text-sm',
+            'mb-2 flex items-center gap-1.5 text-xs font-medium tabular-nums text-error sm:mb-3 sm:text-sm',
             classNames?.error,
           )}
         >
@@ -165,7 +165,7 @@ const TokenAmountInput = <T extends Coin>({
         <NumericInput
           ref={ref}
           type="text"
-          className="h-9 w-full bg-transparent text-[28px] font-medium tabular-nums !leading-normal -tracking-[0.28px] caret-white placeholder:text-white/50 disabled:text-white/50 md:h-12 md:text-[40px] md:-tracking-[0.4px]"
+          className="bg-transparent h-9 w-full text-[28px] font-medium tabular-nums !leading-normal -tracking-[0.28px] caret-white placeholder:text-white/50 disabled:text-white/50 md:h-12 md:text-[40px] md:-tracking-[0.4px]"
           value={amount}
           onChange={(value) => setAmount?.(value)}
           allowNegative={false}
@@ -174,7 +174,7 @@ const TokenAmountInput = <T extends Coin>({
           readOnly={readOnly}
         />
         {!tokens ? (
-          <div className="m-0 flex h-9 shrink-0 items-center justify-end gap-1.5 border-none bg-transparent p-0 sm:gap-2">
+          <div className="bg-transparent m-0 flex h-9 shrink-0 items-center justify-end gap-1.5 border-none p-0 sm:gap-2">
             <TokenImage
               className="aspect-square w-6 shrink-0 rounded-full sm:w-8"
               token={token}

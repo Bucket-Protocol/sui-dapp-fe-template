@@ -70,7 +70,7 @@ const SimpleTokenAmountInput = ({
           </button>
         </div>
         {error && (
-          <div className="absolute bottom-0 mb-0 flex items-center gap-1 text-xs text-[#FF5C5A]">
+          <div className="absolute bottom-0 mb-0 flex items-center gap-1 text-xs text-error">
             <PiWarningCircleFill className="h-3 w-3 shrink-0" />
             <div>{error}</div>
           </div>
@@ -81,7 +81,7 @@ const SimpleTokenAmountInput = ({
           <NumericInput
             ref={ref}
             type="text"
-            className="w-full bg-transparent text-[28px] font-medium tabular-nums !leading-normal -tracking-[0.28px] caret-white placeholder:text-white/50 disabled:text-white/50"
+            className="bg-transparent w-full text-[28px] font-medium tabular-nums !leading-normal -tracking-[0.28px] caret-white placeholder:text-white/50 disabled:text-white/50"
             value={amount}
             onChange={(value) => setAmount?.(value)}
             allowNegative={false}

@@ -3,11 +3,6 @@ import tailwindAnimate from 'tailwindcss-animate';
 
 const config = {
   content: ['./src/app/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}'],
-  safelist: [
-    {
-      pattern: /(text|bg|border)-(danger|warning|safe)/,
-    },
-  ],
   theme: {
     container: {
       center: true,
@@ -28,76 +23,76 @@ const config = {
       '8xl': ['6rem', { lineHeight: '140%', letterSpacing: '-0.06rem' }],
       '9xl': ['8rem', { lineHeight: '140%', letterSpacing: '-0.08rem' }],
     },
+    colors: {
+      black: 'rgb(var(--color-black))',
+      white: 'rgb(var(--color-white))',
+      grey: {
+        '1000': 'rgb(var(--color-grey-1000))',
+        '700': 'rgb(var(--color-grey-700))',
+        '500': 'rgb(var(--color-grey-500))',
+        '400': 'rgb(var(--color-grey-400))',
+        '100': 'rgb(var(--color-grey-100))',
+        '50': 'rgb(var(--color-grey-50))',
+        '25': 'rgb(var(--color-grey-25))',
+      },
+      inverse: {
+        '1000': 'rgb(var(--color-inverse-1000))',
+        '700': 'rgb(var(--color-inverse-700))',
+        '500': 'rgb(var(--color-inverse-500))',
+        '400': 'rgb(var(--color-inverse-400))',
+        '100': 'rgb(var(--color-inverse-100))',
+        '50': 'rgb(var(--color-inverse-50))',
+        '25': 'rgb(var(--color-inverse-25))',
+      },
+      brand: {
+        '1000': 'rgb(var(--color-brand-1000))',
+        '800': 'rgb(var(--color-brand-800))',
+        '200': 'rgb(var(--color-brand-200))',
+        '50': 'rgb(var(--color-brand-50))',
+      },
+      red: {
+        '1000': 'rgb(var(--color-red-1000))',
+        '800': 'rgb(var(--color-red-800))',
+        '200': 'rgb(var(--color-red-200))',
+        '50': 'rgb(var(--color-red-50))',
+      },
+      amber: {
+        '1000': 'rgb(var(--color-amber-1000))',
+        '800': 'rgb(var(--color-amber-800))',
+        '200': 'rgb(var(--color-amber-200))',
+        '50': 'rgb(var(--color-amber-50))',
+      },
+      green: {
+        '1000': 'rgb(var(--color-green-1000))',
+        '800': 'rgb(var(--color-green-800))',
+        '200': 'rgb(var(--color-green-200))',
+        '50': 'rgb(var(--color-green-50))',
+      },
+      teal: {
+        '1000': 'rgb(var(--color-teal-1000))',
+        '800': 'rgb(var(--color-teal-800))',
+        '200': 'rgb(var(--color-teal-200))',
+        '50': 'rgb(var(--color-teal-50))',
+      },
+    },
     extend: {
       screens: {
         xs: '425px',
       },
       colors: {
-        black: 'rgb(var(--color-black))',
-        white: 'rgb(var(--color-white))',
-        grey: {
-          '1000': 'rgb(var(--color-grey-1000))',
-          '700': 'rgb(var(--color-grey-700))',
-          '500': 'rgb(var(--color-grey-500))',
-          '400': 'rgb(var(--color-grey-400))',
-          '100': 'rgb(var(--color-grey-100))',
-          '50': 'rgb(var(--color-grey-50))',
-          '25': 'rgb(var(--color-grey-25))',
-        },
+        strong: 'rgb(var(--color-grey-1000))',
+        weak: 'rgb(var(--color-grey-700))',
+        weaker: 'rgb(var(--color-grey-400))',
+        brand: 'rgb(var(--color-brand-1000))',
+        disabled: 'rgb(var(--color-grey-100))',
+        error: 'rgb(var(--color-red-1000))',
+        warning: 'rgb(var(--color-amber-1000))',
+        success: 'rgb(var(--color-green-1000))',
+        info: 'rgb(var(--color-teal-1000))',
         inverse: {
-          '1000': 'rgb(var(--color-inverse-1000))',
-          '700': 'rgb(var(--color-inverse-700))',
-          '500': 'rgb(var(--color-inverse-500))',
-          '400': 'rgb(var(--color-inverse-400))',
-          '100': 'rgb(var(--color-inverse-100))',
-          '50': 'rgb(var(--color-inverse-50))',
-          '25': 'rgb(var(--color-inverse-25))',
-        },
-        brand: {
-          '1000': 'rgb(var(--color-brand-1000))',
-          '800': 'rgb(var(--color-brand-800))',
-          '200': 'rgb(var(--color-brand-200))',
-          '50': 'rgb(var(--color-brand-50))',
-        },
-        red: {
-          '1000': 'rgb(var(--color-red-1000))',
-          '800': 'rgb(var(--color-red-800))',
-          '200': 'rgb(var(--color-red-200))',
-          '50': 'rgb(var(--color-red-50))',
-        },
-        amber: {
-          '1000': 'rgb(var(--color-amber-1000))',
-          '800': 'rgb(var(--color-amber-800))',
-          '200': 'rgb(var(--color-amber-200))',
-          '50': 'rgb(var(--color-amber-50))',
-        },
-        green: {
-          '1000': 'rgb(var(--color-green-1000))',
-          '800': 'rgb(var(--color-green-800))',
-          '200': 'rgb(var(--color-green-200))',
-          '50': 'rgb(var(--color-green-50))',
-        },
-        teal: {
-          '1000': 'rgb(var(--color-teal-1000))',
-          '800': 'rgb(var(--color-teal-800))',
-          '200': 'rgb(var(--color-teal-200))',
-          '50': 'rgb(var(--color-teal-50))',
-        },
-        text: {
-          strong: 'rgb(var(--color-grey-1000))',
-          weak: 'rgb(var(--color-grey-700))',
-          weaker: 'rgb(var(--color-grey-400))',
-          brand: 'rgb(var(--color-brand-1000))',
-          disabled: 'rgb(var(--color-grey-100))',
-          error: 'rgb(var(--color-red-1000))',
-          warning: 'rgb(var(--color-amber-1000))',
-          success: 'rgb(var(--color-green-1000))',
-          information: 'rgb(var(--color-teal-1000))',
-          inverse: {
-            strong: 'rgb(var(--color-inverse-1000))',
-            weak: 'rgb(var(--color-inverse-700))',
-            disabled: 'rgb(var(--color-inverse-100))',
-          },
+          strong: 'rgb(var(--color-inverse-1000))',
+          weak: 'rgb(var(--color-inverse-700))',
+          disabled: 'rgb(var(--color-inverse-100))',
         },
         stroke: {
           strong: 'rgb(var(--color-grey-500))',
@@ -121,7 +116,7 @@ const config = {
             strong: 'rgb(var(--color-green-800))',
             weak: 'rgb(var(--color-green-200))',
           },
-          information: {
+          info: {
             strong: 'rgb(var(--color-teal-800))',
             weak: 'rgb(var(--color-teal-200))',
           },
@@ -159,7 +154,7 @@ const config = {
             strong: 'rgb(var(--color-green-1000))',
             weak: 'rgb(var(--color-green-50))',
           },
-          information: {
+          info: {
             strong: 'rgb(var(--color-teal-1000))',
             weak: 'rgb(var(--color-teal-50))',
           },

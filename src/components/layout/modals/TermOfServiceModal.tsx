@@ -79,7 +79,7 @@ const TermOfServiceModal = () => {
           </button>
         </div>
         <div className="relative overflow-hidden rounded-2xl bg-[#1E212A] p-5">
-          <ScrollbarContainer className="-mr-4.5 h-[340px] pr-4.5 text-white/80 [&_.os-scrollbar-handle:hover]:bg-white/20 [&_.os-scrollbar-handle]:bg-white/12 [&_.os-scrollbar]:![--os-size:8px]">
+          <ScrollbarContainer className="-mr-4.5 pr-4.5 h-[340px] text-white/80 [&_.os-scrollbar-handle:hover]:bg-white/20 [&_.os-scrollbar-handle]:bg-white/12 [&_.os-scrollbar]:![--os-size:8px]">
             <Markdown>{TERM_OF_SERVICE}</Markdown>
             <div
               ref={handleObserve}
@@ -97,7 +97,7 @@ const TermOfServiceModal = () => {
               className="group absolute inset-x-0 bottom-0 flex items-center justify-center py-6"
               onClick={handleScrollToBottom}
             >
-              <IoChevronDown className="size-4 text-[#A3B2FF] duration-400 group-hover:scale-[1.2]" />
+              <IoChevronDown className="size-4 text-info duration-400 group-hover:scale-[1.2]" />
             </button>
           </div>
         </div>
