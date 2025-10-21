@@ -7,7 +7,7 @@ settings:
 overrides:
   '@mysten/dapp-kit': 0.19.2
   '@mysten/sui': 1.40.0
-  '@mysten/wallet-standard': 0.19.0
+  '@mysten/wallet-standard': 0.19.3
 
 importers:
 
@@ -32,8 +32,8 @@ importers:
         specifier: 1.40.0
         version: 1.40.0(typescript@5.9.3)
       '@mysten/wallet-standard':
-        specifier: 0.19.0
-        version: 0.19.0(typescript@5.9.3)
+        specifier: 0.19.3
+        version: 0.19.3(typescript@5.9.3)
       '@radix-ui/react-accordion':
         specifier: ^1.2.12
         version: 1.2.12(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -620,8 +620,8 @@ packages:
   '@mysten/utils@0.2.0':
     resolution: {integrity: sha512-CM6kJcJHX365cK6aXfFRLBiuyXc5WSBHQ43t94jqlCAIRw8umgNcTb5EnEA9n31wPAQgLDGgbG/rCUISCTJ66w==}
 
-  '@mysten/wallet-standard@0.19.0':
-    resolution: {integrity: sha512-GwJxd+f5EBQUty2pQ4r5G0h7JmABIlBIAyb1NaSns91lim2fEcBGKwTzvOGUsBpYBkBvXwoZDgz6xNzxKbobtQ==}
+  '@mysten/wallet-standard@0.19.3':
+    resolution: {integrity: sha512-M2ZouQlmhz5qYA6fINtfSGX6haVNZZLoRtWF+nK7rAO11VyLsGiGNV4DX0OCaBnjgfo90wS/gAT7+2bpS2YIrg==}
 
   '@mysten/window-wallet-core@0.1.0':
     resolution: {integrity: sha512-QVFthpAv+HJBqoLjsE6gZylE28lrzEd/C68S5tyOCpRV6T3O+P3LCcFmNkLK8gNM6DJNHc/GZgM3f4rTNGOfAQ==}
@@ -4689,7 +4689,7 @@ snapshots:
       '@mysten/slush-wallet': 0.2.3(typescript@5.9.3)
       '@mysten/sui': 1.40.0(typescript@5.9.3)
       '@mysten/utils': 0.2.0
-      '@mysten/wallet-standard': 0.19.0(typescript@5.9.3)
+      '@mysten/wallet-standard': 0.19.3(typescript@5.9.3)
       '@radix-ui/react-dialog': 1.1.15(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@radix-ui/react-dropdown-menu': 2.1.16(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@radix-ui/react-slot': 1.2.3(@types/react@19.2.2)(react@19.2.0)
@@ -4714,7 +4714,7 @@ snapshots:
     dependencies:
       '@mysten/sui': 1.40.0(typescript@5.9.3)
       '@mysten/utils': 0.2.0
-      '@mysten/wallet-standard': 0.19.0(typescript@5.9.3)
+      '@mysten/wallet-standard': 0.19.3(typescript@5.9.3)
       '@mysten/window-wallet-core': 0.1.0
       mitt: 3.0.1
       valibot: 0.36.0
@@ -4746,7 +4746,7 @@ snapshots:
     dependencies:
       '@scure/base': 1.2.6
 
-  '@mysten/wallet-standard@0.19.0(typescript@5.9.3)':
+  '@mysten/wallet-standard@0.19.3(typescript@5.9.3)':
     dependencies:
       '@mysten/sui': 1.40.0(typescript@5.9.3)
       '@wallet-standard/core': 1.1.1
