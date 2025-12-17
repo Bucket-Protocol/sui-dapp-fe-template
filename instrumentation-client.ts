@@ -3,8 +3,9 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import * as Sentry from '@sentry/nextjs';
+import posthog from 'posthog-js';
 
-import { SENTRY_DEBUG, SENTRY_ENVIRONMENT } from '@/consts/monitoring';
+import { POSTHOG_HOST, POSTHOG_KEY, SENTRY_DEBUG, SENTRY_ENVIRONMENT } from '@/consts/monitoring';
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
@@ -29,5 +30,9 @@ Sentry.init({
   // Sets the distribution of the application. Distributions are used to disambiguate build or deployment variants of the same release of an application.
   environment: SENTRY_ENVIRONMENT,
 });
+
+if (POSTHOG_HOST && POSTHOG_KEY) {
+  posthog.init(POSTHOG_HOST, { api_host: POSTHOG_HOST });
+}
 
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;

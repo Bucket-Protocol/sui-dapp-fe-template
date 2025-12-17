@@ -1,44 +1,30 @@
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { FlatCompat } from '@eslint/eslintrc';
-import js from '@eslint/js';
-import tsParser from '@typescript-eslint/parser';
-import reactHooks from 'eslint-plugin-react-hooks';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
+import prettier from 'eslint-config-prettier/flat';
 import unusedImports from 'eslint-plugin-unused-imports';
+import { defineConfig, globalIgnores } from 'eslint/config';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
-
-const config = [
-  ...compat.extends(
-    'next/core-web-vitals',
-    'next/typescript',
-    'plugin:@typescript-eslint/recommended',
-    'prettier',
-    'plugin:prettier/recommended',
-  ),
+const config = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  prettier,
   {
     plugins: {
-      'react-hooks': reactHooks,
       'unused-imports': unusedImports,
     },
-    languageOptions: {
-      parser: tsParser,
-    },
     rules: {
+      'react-hooks/set-state-in-effect': 'warn',
+
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
-      'react-hooks/set-state-in-effect': 'off',
       'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': 'error',
+
       'no-console': ['error', { allow: ['error'] }],
       eqeqeq: 'error',
     },
   },
-];
+  globalIgnores(['.next/**', 'node_modules/**', 'out/**', 'build/**', 'next-env.d.ts', 'src/_generated/']),
+]);
 
 export default config;

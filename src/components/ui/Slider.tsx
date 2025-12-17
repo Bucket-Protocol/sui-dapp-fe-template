@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 
 import { EventPayload } from '@/types/tracking';

@@ -3,6 +3,11 @@ import tailwindAnimate from 'tailwindcss-animate';
 
 const config = {
   content: ['./src/app/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}'],
+  safelist: [
+    {
+      pattern: /(text|bg|border)-(success|warning|error|info)/,
+    },
+  ],
   theme: {
     container: {
       center: true,
@@ -24,6 +29,8 @@ const config = {
       '9xl': ['8rem', { lineHeight: '140%', letterSpacing: '-0.08rem' }],
     },
     colors: {
+      current: 'currentColor',
+      transparent: 'transparent',
       black: 'rgb(var(--color-black))',
       white: 'rgb(var(--color-white))',
       grey: {

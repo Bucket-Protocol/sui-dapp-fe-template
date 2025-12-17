@@ -4,16 +4,6 @@ import { withSentryConfig } from '@sentry/nextjs';
 import { SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT } from '@/consts/monitoring';
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    resolveAlias: {
-      'isomorphic-fetch': 'cross-fetch',
-    },
-  },
-  webpack: (config) => {
-    config.resolve.alias['isomorphic-fetch'] = 'cross-fetch';
-
-    return config;
-  },
   headers: async () => [
     {
       source: '/((?!api|_next/static|_next/image|favicon.png).*)',

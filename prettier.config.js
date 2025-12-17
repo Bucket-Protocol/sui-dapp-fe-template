@@ -16,6 +16,7 @@ const config = {
     '<THIRD_PARTY_MODULES>',
     '',
     '^@/types(.*)$',
+    '^@/types(.*)$',
     '^@/app(.*)$',
     '^@/consts(.*)$',
     '^@/stores(.*)$',
