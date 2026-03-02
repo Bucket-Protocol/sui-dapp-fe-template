@@ -4,124 +4,159 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development Commands
 
-### Core Commands
-
 - `pnpm dev` - Start development server with Turbopack
 - `pnpm build` - Build production application
 - `pnpm start` - Start production server
 - `pnpm lint` - Run ESLint for code quality checks
 
-### Testing Commands
+No test framework is currently configured. Add Jest + React Testing Library or Vitest when implementing tests.
 
-- No test framework currently configured
-- When implementing tests, consider adding Jest + React Testing Library or Vitest
+## Technology Stack
 
-## High-Level Architecture
+- **Framework**: Next.js 16+ App Router, React 19
+- **Blockchain**: Sui via `@mysten/dapp-kit` and `@mysten/sui`
+- **State**: Zustand (client state) + TanStack Query v5 (server/async state)
+- **UI**: Radix UI primitives + Tailwind CSS v3 + `tailwindcss-animate`
+- **Analytics**: Amplitude, Google Analytics 4, Microsoft Clarity, PostHog
+- **A/B Testing**: GrowthBook
+- **Error Tracking**: Sentry (`@sentry/nextjs`)
 
-### Application Structure
-
-- **Next.js 15+ App Router** with route groups in `src/app/(main)/`
-- **API Routes**: Located in `src/app/api/` for backend functionality
-
-### Key Technology Stack
-
-- **Blockchain**: Sui blockchain integration via `@mysten/dapp-kit`
-- **State Management**: Zustand for client state, TanStack Query for server state
-- **UI Framework**: Radix UI primitives with Tailwind CSS
-- **Multi-Protocol DeFi**: Integrates Cetus, Scallop, and other DeFi protocols
-- **Analytics & Monitoring**: Amplitude, Microsoft Clarity, GrowthBook for A/B testing, Sentry for error tracking
-
-### Component Architecture
+## Project Structure
 
 ```
-src/components/
-├── {feature}/        # Feature-specific components (earn, borrow, market, etc.)
-│   ├── cards/        # Feature-specific card components
-│   ├── modals/       # Feature-specific modals
-│   ├── sections/     # Page section components
-│   └── inputs/       # Custom inputs
-├── shared/           # Cross-feature reusable components
-├── ui/              # Base UI components (Radix-based)
-└── layout/          # Layout and navigation components
+src/
+├── app/
+│   ├── layout.tsx           # Root layout — provider nesting lives here
+│   ├── globals.css
+│   ├── global-error.tsx     # Top-level error boundary
+│   ├── api/health-check/    # Health check API route
+│   └── (main)/              # Route group for main pages
+│       ├── layout.tsx
+│       └── page.tsx
+├── components/
+│   ├── layout/              # App shell: Header, Footer, Marquee, nav, modals
+│   │   ├── providers/       # SuiDappProvider, TrackingProvider, GrowthBookProvider
+│   │   ├── header/          # NavBar, mobile nav, dropdowns (account, RPC)
+│   │   ├── modals/          # WalletModal, TermOfServiceModal
+│   │   └── toast/           # ToastContainer, ToastLink
+│   ├── ui/                  # Base UI components (Radix wrappers + primitives)
+│   └── shared/              # Cross-feature reusable components
+│       ├── buttons/         # ActionButton, SelectTokenButton
+│       ├── modals/          # SelectTokenModal
+│       ├── inputs/          # TokenAmountInput, SimpleTokenAmountInput
+│       └── icons/           # ShiningIcon, FadeInArrow, etc.
+├── hooks/
+│   ├── base/                # useQuery.ts, useMutation.ts — core wrappers
+│   ├── queries/general/     # useGetBalances.ts, useGetPrices.ts
+│   └── utils/               # useDebounce, useTimer, useUpdateEffect, etc.
+├── stores/
+│   ├── appStateStore.ts     # searchParams, isMarqueeShown, isMobileNavOpen, isWalletModalOpen
+│   └── preferenceStore.ts   # rpcNode (persisted), termOfServiceAccepted (persisted)
+├── consts/
+│   ├── monitoring.ts        # All analytics/Sentry keys from env
+│   ├── network.ts           # NETWORK = 'mainnet', RPC_NODES config
+│   ├── tokens.ts            # Supported token list (ALL_ASSETS)
+│   ├── navigation.ts        # Route definitions
+│   ├── wallets.ts           # Wallet configs
+│   ├── errors.ts            # Error messages
+│   ├── metadata.ts          # Page metadata
+│   └── keys.ts              # Misc API keys/constants
+├── types/
+│   ├── index.d.ts           # RpcNode, Coin, TokenInfo, CoinBalance, CoinPrices, Wallet
+│   └── tracking.d.ts        # TrackingEvents, EventPayload
+├── libs/
+│   ├── utils.ts             # General utilities
+│   ├── format.ts            # Number/address/date formatters
+│   └── price.ts             # Price calculation helpers
+└── fonts/                   # Custom font files (TTInterphasesPro)
 ```
 
-### Data Layer
+## Provider Nesting
 
-- **Custom Hooks**: Located in `src/hooks/` with base query/mutation wrappers
-- **Stores**: Zustand stores in `src/stores/` for app state and preferences
-- **Constants**: Token configurations and app constants in `src/consts/`
-
-### Code Quality Standards
-
-- **ESLint**: Next.js, TypeScript, and Prettier integration
-- **Import Ordering**: Strict import order enforced by Prettier plugin
-- **No Console Logs**: Only `console.error` allowed
-- **Unused Imports**: Automatically removed by ESLint
-
-### Important Development Notes
-
-- Path aliases use `@/` prefix for clean imports
-- Tailwind configuration includes custom colors and spacing
-- Security headers configured for frame protection and MSafe integration (`next.config.ts`)
-- Environment detection prioritizes `SENTRY_ENVIRONMENT` > `VERCEL_ENV` > `NODE_ENV`
-- Sentry DSN must be configured via `SENTRY_DSN` environment variable
-- Sentry monitoring tunnel configured at `/monitoring` route to bypass ad-blockers
-- No test framework currently configured - add testing setup when implementing tests
-
-### Key Libraries to Know
-
-- `@mysten/dapp-kit` - Sui wallet connectivity
-- `zustand` - State management
-- `@tanstack/react-query` - Server state management
-- `@radix-ui/*` - Accessible UI components
-- `@sentry/nextjs` - Error tracking and performance monitoring
-
-### Hook Architecture Patterns
-
-- **Base Hooks**: `src/hooks/base/` contains `useQuery` and `useMutation` wrappers with custom logic
-- **Query Hooks**: Custom data fetching with dependent query support and debouncing
-- **Mutation Hooks**: Organized by feature with consistent error handling
-- **Composed Queries**: Higher-level hooks that combine multiple data sources
-
-### Provider Structure
-
-The app uses a nested provider pattern in `src/app/layout.tsx`:
+Defined in `src/app/layout.tsx`:
 
 ```
-SuiDappProvider → GrowthBookProvider → TrackingProvider
+SuiDappProvider         # QueryClient + SuiClientProvider + SuiWalletProvider
+  → GrowthBookProvider  # A/B testing
+    → TrackingProvider  # GA4, Amplitude, Clarity — exposes sendTrackingEvent
 ```
 
-### Environment Management
+**SuiDappProvider** (`src/components/layout/providers/SuiDappProvider.tsx`):
+- `QueryClientProvider` with `staleTime: 5 minutes`
+- `SuiClientProvider` for RPC node switching (reads from `preferenceStore`)
+- `SuiWalletProvider` with auto-connect enabled
 
-The application uses sophisticated environment detection via `src/consts/monitoring.ts`:
+**TrackingProvider** (`src/components/layout/providers/TrackingProvider.tsx`):
+- Initializes Clarity, GA4, Amplitude on mount
+- Provides `sendTrackingEvent` context function
+- Tracks clicks via `data-tracking` attributes on elements
 
-```typescript
-export const SENTRY_ENVIRONMENT =
-  process.env.SENTRY_ENVIRONMENT || // Explicit override
-  process.env.VERCEL_ENV || // Vercel deployment environment
-  (process.env.NODE_ENV === 'development' ? 'local' : 'production');
+## Hook Architecture
+
+**Base hooks** (`src/hooks/base/`) — always prefer these over raw TanStack Query:
+
+- `useQuery`: Wraps `@tanstack/react-query` with debouncing, dependent query support, silent mode, and `invalidate()` helper
+- `useMutation`: Wraps Sui transaction building, `signAndExecuteTransaction`, and error handling
+
+**Naming convention**: `useGet*` for queries, `use*` for mutations.
+
+## State Management
+
+**Zustand stores** (`src/stores/`):
+- `appStateStore` — ephemeral UI state (nav open, wallet modal, search params)
+- `preferenceStore` — persisted to `localStorage` (selected RPC node, ToS acceptance)
+
+## Code Quality Standards
+
+- **Import order**: Enforced by Prettier plugin — violations will fail lint
+- **No `console.log`**: Only `console.error` is allowed
+- **Unused imports**: Auto-removed by ESLint
+- **Path aliases**: Always use `@/` (maps to `src/`)
+- **TypeScript strict mode**: Enabled — no implicit `any`
+
+## Tailwind Configuration
+
+Custom layers in `tailwind.config.ts`:
+
+- **Colors**: Semantic palette (`brand`, `red`, `amber`, `green`, `teal`) with `strong/weak/weaker/disabled` variants; `stroke.*`, `fill.*`, `inverse.*` groups
+- **Z-index scale**: `marquee:5`, `header:10`, `footer:10`, `fab:20`, `dropdown:30`, `modal:40`, `tooltip:50`, `toast:60`
+- **Breakpoints**: Adds `xs` (425px) below the default `sm`
+- **Animations**: `accordion-down/up`, `border-move`, `rotate`, `floating`
+
+## Environment Variables
+
+All variables are `NEXT_PUBLIC_` prefixed and available in the browser. Copy `.env.example` to `.env.local`:
+
+```
+NEXT_PUBLIC_SENTRY_DSN
+NEXT_PUBLIC_SENTRY_ORG
+NEXT_PUBLIC_SENTRY_PROJECT
+NEXT_PUBLIC_SENTRY_ENVIRONMENT   # Overrides auto-detection
+NEXT_PUBLIC_SENTRY_AUTH_TOKEN
+NEXT_PUBLIC_SENTRY_DEBUG
+NEXT_PUBLIC_GA_MEASUREMENT_ID
+NEXT_PUBLIC_AMPLITUDE_API_KEY
+NEXT_PUBLIC_CLARITY_PROJECT_ID
+NEXT_PUBLIC_POSTHOG_HOST
+NEXT_PUBLIC_POSTHOG_KEY
+NEXT_PUBLIC_GROWTHBOOK_API_HOST
+NEXT_PUBLIC_GROWTHBOOK_API_KEY
 ```
 
-**Environment Priority**:
+**Sentry environment detection** (in `src/consts/monitoring.ts`):
+```
+NEXT_PUBLIC_SENTRY_ENVIRONMENT → VERCEL_ENV → NODE_ENV ('development' → 'local')
+```
 
-1. `SENTRY_ENVIRONMENT` - Manual override
-2. `VERCEL_ENV` - Automatic Vercel environment detection (preview, production)
-3. `NODE_ENV` fallback - Maps development to 'local', others to 'production'
+## Sentry Configuration
 
-### Error Tracking & Monitoring
+- **Client**: `src/instrumentation-client.ts` — browser tracking + session replay (10% sample, 100% on error)
+- **Server**: `sentry.server.config.ts`
+- **Edge**: `sentry.edge.config.ts`
+- **Tunnel**: `/monitoring` route bypasses ad-blockers (configured in `next.config.ts`)
+- **Trace rate**: 100% in development, 10% in production
 
-Sentry is integrated across all runtime environments:
+## Security Headers (next.config.ts)
 
-- **Client**: `src/instrumentation-client.ts` - Browser error tracking with session replay
-- **Server**: `sentry.server.config.ts` - Server-side error capture
-- **Edge**: `sentry.edge.config.ts` - Edge runtime monitoring
-
-**Environment-Specific Configuration**:
-
-- **Trace Sample Rate**: 100% in development, 10% in production
-- **Session Replay**: 10% sampling rate with 100% error capture
-- **Debug Mode**: Controlled via `SENTRY_DEBUG` constant
-
-**Required Environment Variables**:
-
-- `SENTRY_DSN` - Sentry project DSN for error reporting
+- `X-Frame-Options: SAMEORIGIN`
+- `Referrer-Policy: strict-origin-when-cross-origin`
