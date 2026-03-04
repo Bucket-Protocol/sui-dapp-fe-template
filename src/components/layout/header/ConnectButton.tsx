@@ -6,6 +6,7 @@ import { useAppStateStore } from '@/stores/appStateStore';
 
 const ConnectButton = () => {
   const { setIsWalletModalOpen } = useAppStateStore(({ setIsWalletModalOpen }) => ({ setIsWalletModalOpen }));
+
   return (
     <button
       type="button"
@@ -32,4 +33,5 @@ const ConnectButton = () => {
     </button>
   );
 };
+
 export default ConnectButton;

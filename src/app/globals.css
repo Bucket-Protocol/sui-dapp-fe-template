@@ -10,46 +10,46 @@
     --color-black: 0 0 0;
     --color-white: 255 255 255;
 
-    --color-grey-1000: 255 255 255 1;
-    --color-grey-700: 255 255 255 0.78;
-    --color-grey-500: 255 255 255 0.6;
-    --color-grey-400: 255 255 255 0.5;
-    --color-grey-100: 255 255 255 0.12;
-    --color-grey-50: 255 255 255 0.06;
-    --color-grey-25: 255 255 255 0.03;
+    --color-grey-1000: 255 255 255 / 1;
+    --color-grey-700: 255 255 255 / 0.78;
+    --color-grey-500: 255 255 255 / 0.6;
+    --color-grey-400: 255 255 255 / 0.5;
+    --color-grey-100: 255 255 255 / 0.12;
+    --color-grey-50: 255 255 255 / 0.06;
+    --color-grey-25: 255 255 255 / 0.03;
 
-    --color-inverse-1000: 0 0 0 0.9;
-    --color-inverse-700: 0 0 0 0.65;
-    --color-inverse-500: 0 0 0 0.45;
-    --color-inverse-400: 0 0 0 0.4;
-    --color-inverse-100: 0 0 0 0.1;
-    --color-inverse-50: 0 0 0 0.04;
-    --color-inverse-25: 0 0 0 0.02;
+    --color-inverse-1000: 0 0 0 / 0.9;
+    --color-inverse-700: 0 0 0 / 0.65;
+    --color-inverse-500: 0 0 0 / 0.45;
+    --color-inverse-400: 0 0 0 / 0.4;
+    --color-inverse-100: 0 0 0 / 0.1;
+    --color-inverse-50: 0 0 0 / 0.04;
+    --color-inverse-25: 0 0 0 / 0.02;
 
-    --color-brand-1000: 163 178 255 1;
-    --color-brand-800: 163 178 255 0.8;
-    --color-brand-200: 163 178 255 0.2;
-    --color-brand-50: 163 178 255 0.06;
+    --color-brand-1000: 163 178 255 / 1;
+    --color-brand-800: 163 178 255 / 0.8;
+    --color-brand-200: 163 178 255 / 0.2;
+    --color-brand-50: 163 178 255 / 0.06;
 
-    --color-red-1000: 255 92 90 1;
-    --color-red-800: 255 92 90 0.8;
-    --color-red-200: 255 92 90 0.2;
-    --color-red-50: 255 92 90 0.08;
+    --color-red-1000: 255 92 90 / 1;
+    --color-red-800: 255 92 90 / 0.8;
+    --color-red-200: 255 92 90 / 0.2;
+    --color-red-50: 255 92 90 / 0.08;
 
-    --color-amber-1000: 241 193 69 1;
-    --color-amber-800: 241 193 69 0.8;
-    --color-amber-200: 241 193 69 0.2;
-    --color-amber-50: 241 193 69 0.08;
+    --color-amber-1000: 241 193 69 / 1;
+    --color-amber-800: 241 193 69 / 0.8;
+    --color-amber-200: 241 193 69 / 0.2;
+    --color-amber-50: 241 193 69 / 0.08;
 
-    --color-green-1000: 106 255 130 1;
-    --color-green-800: 106 255 130 0.8;
-    --color-green-200: 106 255 130 0.2;
-    --color-green-50: 106 255 130 0.08;
+    --color-green-1000: 106 255 130 / 1;
+    --color-green-800: 106 255 130 / 0.8;
+    --color-green-200: 106 255 130 / 0.2;
+    --color-green-50: 106 255 130 / 0.08;
 
-    --color-teal-1000: 126 192 229 1;
-    --color-teal-800: 126 192 229 0.8;
-    --color-teal-200: 126 192 229 0.2;
-    --color-teal-50: 126 192 229 0.08;
+    --color-teal-1000: 126 192 229 / 1;
+    --color-teal-800: 126 192 229 / 0.8;
+    --color-teal-200: 126 192 229 / 0.2;
+    --color-teal-50: 126 192 229 / 0.08;
   }
 
   * {

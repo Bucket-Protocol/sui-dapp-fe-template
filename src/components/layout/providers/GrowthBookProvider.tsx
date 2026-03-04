@@ -10,9 +10,11 @@ const gb = new GrowthBook({
   clientKey: GROWTHBOOK_API_KEY,
 });
 
-gb.init({
-  streaming: true,
-});
+if (GROWTHBOOK_API_HOST) {
+  gb.init({
+    streaming: true,
+  });
+}
 
 const GrowthBookProvider = ({ children }: { children: ReactNode }) => {
   return <GrowthBookProviderBase growthbook={gb}>{children}</GrowthBookProviderBase>;

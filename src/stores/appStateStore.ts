@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { useShallow } from 'zustand/react/shallow';
 
 interface AppStateStore {
   searchParams: Record<string, string>;
@@ -14,7 +15,7 @@ interface AppStateStore {
   setIsWalletModalOpen: (open: boolean) => void;
 }
 
-export const useAppStateStore = create<AppStateStore>()((set) => ({
+const useAppStateStoreInternal = create<AppStateStore>((set) => ({
   searchParams: {},
   setSearchParams: (params) => set({ searchParams: params }),
 
@@ -27,3 +28,6 @@ export const useAppStateStore = create<AppStateStore>()((set) => ({
   isWalletModalOpen: false,
   setIsWalletModalOpen: (open: boolean) => set({ isWalletModalOpen: open }),
 }));
+
+export const useAppStateStore = <U>(selector: (state: AppStateStore) => U) =>
+  useAppStateStoreInternal(useShallow<AppStateStore, U>(selector));

@@ -2,7 +2,8 @@
 
 import { useMemo } from 'react';
 import Link from 'next/link';
-import { useCurrentAccount, useDisconnectWallet, useResolveSuiNSName } from '@mysten/dapp-kit';
+import { useCurrentAccount, useCurrentClient, useDAppKit } from '@mysten/dapp-kit-react';
+import { useQuery } from '@tanstack/react-query';
 import { BiExit } from 'react-icons/bi';
 import { LuClipboardCopy } from 'react-icons/lu';
 import { SlMagnifier } from 'react-icons/sl';
@@ -14,10 +15,20 @@ import AccountSwitcher from '@/components/layout/header/dropdowns/AccountSwitche
 import RpcMenu from '@/components/layout/header/dropdowns/RpcSwitcher';
 
 const AccountMenu = () => {
+  const dAppKit = useDAppKit();
   const account = useCurrentAccount();
-  const { data: suiName } = useResolveSuiNSName(account?.address);
-  const { mutate: disconnectWallet } = useDisconnectWallet();
+  const client = useCurrentClient();
 
+  const { data: suiName } = useQuery({
+    queryKey: ['suiNS', account?.address],
+    queryFn: async () => {
+      const result = await client.nameService.reverseLookupName({ address: account!.address });
+
+      return result?.response.record?.name;
+    },
+    enabled: !!account?.address,
+    staleTime: 300_000,
+  });
   const displayName = useMemo(() => {
     if (suiName) {
       if (suiName.length < 14) {
@@ -58,7 +69,7 @@ const AccountMenu = () => {
       >
         <AccountSwitcher />
         <DropdownMenuItem
-          className="flex w-full cursor-pointer items-center justify-start gap-2 rounded-lg p-2 text-sm duration-400 hover:bg-main-700"
+          className="flex w-full cursor-pointer items-center justify-start gap-2 rounded-lg p-2 text-sm duration-400 hover:bg-fill-weak"
           onClick={() => {
             window.navigator.clipboard.writeText(account?.address || '');
             toast.info('Your address copied to clipboard');
@@ -72,7 +83,7 @@ const AccountMenu = () => {
         </DropdownMenuItem>
         <DropdownMenuItem className="m-0 w-full p-0">
           <Link
-            className="flex w-full items-center justify-start gap-2 rounded-lg p-2 text-sm duration-400 hover:bg-main-700"
+            className="flex w-full items-center justify-start gap-2 rounded-lg p-2 text-sm duration-400 hover:bg-fill-weak"
             href={`https://suivision.xyz/account/${account?.address || ''}`}
             target="_blank"
           >
@@ -85,8 +96,8 @@ const AccountMenu = () => {
         </DropdownMenuItem>
         <RpcMenu />
         <DropdownMenuItem
-          className="flex w-full cursor-pointer items-center justify-start gap-2 rounded-lg p-2 text-sm duration-400 hover:bg-main-700"
-          onClick={() => disconnectWallet()}
+          className="flex w-full cursor-pointer items-center justify-start gap-2 rounded-lg p-2 text-sm duration-400 hover:bg-fill-weak"
+          onClick={() => dAppKit.disconnectWallet()}
         >
           <BiExit
             strokeWidth={1}

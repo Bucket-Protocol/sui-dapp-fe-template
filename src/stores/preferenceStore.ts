@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useShallow } from 'zustand/react/shallow';
 
 import { RpcNode } from '@/types';
 import { RPC_NODES } from '@/consts/network';
@@ -12,7 +13,7 @@ interface PreferenceState {
   setTermOfServiceAccepted: (termOfServiceAccepted: boolean) => void;
 }
 
-export const usePreferenceStore = create<PreferenceState>()(
+const usePreferenceStoreInternal = create<PreferenceState>()(
   persist(
     (set) => ({
       rpcNode: Object.keys(RPC_NODES)[0] as RpcNode,
@@ -31,3 +32,6 @@ export const usePreferenceStore = create<PreferenceState>()(
     },
   ),
 );
+
+export const usePreferenceStore = <U>(selector: (state: PreferenceState) => U) =>
+  usePreferenceStoreInternal(useShallow<PreferenceState, U>(selector));

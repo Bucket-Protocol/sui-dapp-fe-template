@@ -4,7 +4,7 @@ import { createContext, useCallback, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import * as amplitude from '@amplitude/analytics-browser';
 import clarity from '@microsoft/clarity';
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit-react';
 import ga from 'react-ga4';
 
 import { EventPayload } from '@/types/tracking';

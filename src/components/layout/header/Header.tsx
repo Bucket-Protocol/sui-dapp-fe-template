@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount } from '@mysten/dapp-kit-react';
 
 import ConnectButton from '@/components/layout/header/ConnectButton';
 import AccountMenu from '@/components/layout/header/dropdowns/AccountMenu';

@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
-import { SuiTransactionBlockResponse } from '@mysten/sui/client';
+import { useCurrentAccount, useCurrentClient, useDAppKit } from '@mysten/dapp-kit-react';
+import type { SuiClientTypes } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 
 import { ERROR_MESSAGE } from '@/consts/errors';
-import { NETWORK } from '@/consts/network';
 
 export type UseMutationOptions = {
   waitForTransaction?: boolean;
@@ -19,6 +18,12 @@ export type UseMutationParams<T> = {
   errorMessageOverride?: string;
 } & UseMutationOptions;
 
+type TransactionResult = SuiClientTypes.TransactionResult<{
+  effects: true;
+  transaction: true;
+  bcs: true;
+}>;
+
 const useMutation = <T>({
   getTransaction,
   waitForTransaction = true,
@@ -32,24 +37,9 @@ const useMutation = <T>({
   errorMessagePrefix?: string;
   errorMessageOverride?: string;
 }) => {
+  const dAppKit = useDAppKit();
   const account = useCurrentAccount();
-  const client = useSuiClient();
-
-  const { mutateAsync: signAndExecuteTransaction } = useSignAndExecuteTransaction({
-    execute: async ({ bytes, signature }) => {
-      const response = await client.executeTransactionBlock({
-        transactionBlock: bytes,
-        signature: signature,
-        options: {
-          showRawEffects: true,
-        },
-      });
-      if (waitForTransaction) {
-        await client.waitForTransaction({ digest: response.digest });
-      }
-      return response;
-    },
-  });
+  const client = useCurrentClient();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const execute = async ({
@@ -58,7 +48,7 @@ const useMutation = <T>({
     onFailure,
   }: {
     variables: T;
-    onSuccess: (response: SuiTransactionBlockResponse) => void;
+    onSuccess: (response: TransactionResult) => void;
     onFailure: (e: Error) => void;
   }) => {
     if (disabled || isLoading) {
@@ -75,14 +65,22 @@ const useMutation = <T>({
 
       tx.setSender(account.address);
 
-      const response = await signAndExecuteTransaction({
-        transaction: tx,
-        chain: `sui:${NETWORK}`,
-      });
-      if (response.effects?.status.error) {
-        onFailure?.(new Error(errorMessagePrefix + (errorMessageOverride ?? response.effects?.status.error)));
+      const result = await dAppKit.signAndExecuteTransaction({ transaction: tx });
+
+      if (result.$kind === 'FailedTransaction') {
+        onFailure?.(new Error(errorMessagePrefix + (errorMessageOverride ?? 'Transaction failed')));
+      } else if (!result.Transaction.status.success) {
+        onFailure?.(
+          new Error(
+            errorMessagePrefix +
+              (errorMessageOverride ?? result.Transaction.status.error?.message ?? 'Transaction failed'),
+          ),
+        );
       } else {
-        onSuccess?.(response);
+        if (waitForTransaction) {
+          await client.waitForTransaction({ digest: result.Transaction.digest });
+        }
+        onSuccess?.(result);
       }
     } catch (e) {
       if (e instanceof Error) {

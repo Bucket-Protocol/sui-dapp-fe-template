@@ -14,7 +14,7 @@ No test framework is currently configured. Add Jest + React Testing Library or V
 ## Technology Stack
 
 - **Framework**: Next.js 16+ App Router, React 19
-- **Blockchain**: Sui via `@mysten/dapp-kit` and `@mysten/sui`
+- **Blockchain**: Sui via `@mysten/dapp-kit-react` v2 + `@mysten/dapp-kit-core` v1 + `@mysten/sui` v2 (gRPC client)
 - **State**: Zustand (client state) + TanStack Query v5 (server/async state)
 - **UI**: Radix UI primitives + Tailwind CSS v3 + `tailwindcss-animate`
 - **Analytics**: Amplitude, Google Analytics 4, Microsoft Clarity, PostHog
@@ -35,7 +35,7 @@ src/
 │       └── page.tsx
 ├── components/
 │   ├── layout/              # App shell: Header, Footer, Marquee, nav, modals
-│   │   ├── providers/       # SuiDappProvider, TrackingProvider, GrowthBookProvider
+│   │   ├── providers/       # DappProvider, TrackingProvider, GrowthBookProvider
 │   │   ├── header/          # NavBar, mobile nav, dropdowns (account, RPC)
 │   │   ├── modals/          # WalletModal, TermOfServiceModal
 │   │   └── toast/           # ToastContainer, ToastLink
@@ -54,7 +54,7 @@ src/
 │   └── preferenceStore.ts   # rpcNode (persisted), termOfServiceAccepted (persisted)
 ├── consts/
 │   ├── monitoring.ts        # All analytics/Sentry keys from env
-│   ├── network.ts           # NETWORK = 'mainnet', RPC_NODES config
+│   ├── network.ts           # RPC_NODES config
 │   ├── tokens.ts            # Supported token list (ALL_ASSETS)
 │   ├── navigation.ts        # Route definitions
 │   ├── wallets.ts           # Wallet configs
@@ -76,33 +76,61 @@ src/
 Defined in `src/app/layout.tsx`:
 
 ```
-SuiDappProvider         # QueryClient + SuiClientProvider + SuiWalletProvider
+SuiDappProvider         # QueryClient + DappProvider (DAppKitProvider)
   → GrowthBookProvider  # A/B testing
     → TrackingProvider  # GA4, Amplitude, Clarity — exposes sendTrackingEvent
 ```
 
 **SuiDappProvider** (`src/components/layout/providers/SuiDappProvider.tsx`):
+
 - `QueryClientProvider` with `staleTime: 5 minutes`
-- `SuiClientProvider` for RPC node switching (reads from `preferenceStore`)
-- `SuiWalletProvider` with auto-connect enabled
+- Renders `DappProvider` (see below) for Sui wallet/client integration
+
+**DappProvider** (`src/components/layout/providers/DappProvider.tsx`):
+
+- Creates the `dAppKit` singleton via `createDAppKit` from `@mysten/dapp-kit-react`
+- `networks: ['mainnet']` — must be exactly `'mainnet'` for installed wallets to be detected (wallets advertise `sui:mainnet`)
+- Uses a `Proxy`-based RPC switching pattern (see **RPC Switching** below)
+- Module augmentation: `declare module '@mysten/dapp-kit-react' { interface Register { dAppKit: typeof dAppKit } }` — makes `useCurrentClient()` return `SuiGrpcClient` project-wide
 
 **TrackingProvider** (`src/components/layout/providers/TrackingProvider.tsx`):
+
 - Initializes Clarity, GA4, Amplitude on mount
 - Provides `sendTrackingEvent` context function
 - Tracks clicks via `data-tracking` attributes on elements
+
+## RPC Switching
+
+**Problem**: `createDAppKit` caches its client and only accepts real network names (`'mainnet'` etc.) — custom RPC keys like `'official'`/`'blast'` break wallet chain detection.
+
+**Solution** (in `DappProvider.tsx`):
+
+1. A module-level `_innerClient: SuiGrpcClient` holds the active gRPC client
+2. A `Proxy` wrapping `_innerClient` is passed to `createClient` — every call is forwarded to the current `_innerClient` via `Reflect.get`, so `dAppKit` never needs to be recreated
+3. `switchRpcEndpoint(baseUrl)` replaces `_innerClient` with a new `SuiGrpcClient`
+4. `RpcSwitcher` calls `switchRpcEndpoint(baseUrl)` + `setRpcNode(key)` — no `dAppKit.switchNetwork()` needed
+5. Query keys in `useGetBalances` include `rpcNode` from `preferenceStore` so TanStack Query re-fetches on node switch
+
+```typescript
+// How to switch RPC nodes from any component:
+import { switchRpcEndpoint } from '@/components/layout/providers/DappProvider';
+switchRpcEndpoint(RPC_NODES[key].baseUrl);
+setRpcNode(key); // persists to localStorage + invalidates query cache
+```
 
 ## Hook Architecture
 
 **Base hooks** (`src/hooks/base/`) — always prefer these over raw TanStack Query:
 
 - `useQuery`: Wraps `@tanstack/react-query` with debouncing, dependent query support, silent mode, and `invalidate()` helper
-- `useMutation`: Wraps Sui transaction building, `signAndExecuteTransaction`, and error handling
+- `useMutation`: Wraps Sui transaction building, `dAppKit.signAndExecuteTransaction`, and error handling. Result type: `SuiClientTypes.TransactionResult<{effects:true,transaction:true,bcs:true}>` — check `result.$kind === 'FailedTransaction'` or `!result.Transaction.status.success` for errors
 
 **Naming convention**: `useGet*` for queries, `use*` for mutations.
 
 ## State Management
 
 **Zustand stores** (`src/stores/`):
+
 - `appStateStore` — ephemeral UI state (nav open, wallet modal, search params)
 - `preferenceStore` — persisted to `localStorage` (selected RPC node, ToS acceptance)
 
@@ -144,6 +172,7 @@ NEXT_PUBLIC_GROWTHBOOK_API_KEY
 ```
 
 **Sentry environment detection** (in `src/consts/monitoring.ts`):
+
 ```
 NEXT_PUBLIC_SENTRY_ENVIRONMENT → VERCEL_ENV → NODE_ENV ('development' → 'local')
 ```

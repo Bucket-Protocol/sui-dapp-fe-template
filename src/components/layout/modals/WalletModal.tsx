@@ -2,7 +2,8 @@
 
 import { useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useAutoConnectWallet, useConnectWallet, useCurrentWallet, useWallets } from '@mysten/dapp-kit';
+import type { UiWallet } from '@mysten/dapp-kit-core';
+import { useCurrentWallet, useDAppKit, useWallets } from '@mysten/dapp-kit-react';
 import { isAndroid, isIOS, isMobile } from 'react-device-detect';
 import { LuChevronDown, LuX } from 'react-icons/lu';
 
@@ -39,38 +40,38 @@ const WalletButton = ({
   icon: string;
   isInstalled: boolean;
   onClick: () => void;
-}) => {
-  return (
-    <button
-      type="button"
-      key={name}
-      className="group flex w-full items-center gap-4 rounded-lg p-1.5 duration-400 hover:bg-white/8"
-      onClick={onClick}
-    >
-      <Image
-        src={icon}
-        alt={name}
-        width={32}
-        height={32}
-        className="rounded-xl"
-      />
-      <span className="text-white/75 duration-400 group-hover:text-white">{title}</span>
-      <span className="ml-auto text-sm font-semibold text-white/50 duration-400 group-hover:text-white">
-        {isInstalled ? 'Connect' : 'Install'}
-      </span>
-    </button>
-  );
-};
+}) => (
+  <button
+    type="button"
+    key={name}
+    className="group flex w-full items-center gap-4 rounded-lg p-1.5 duration-400 hover:bg-white/8"
+    onClick={onClick}
+  >
+    <Image
+      src={icon}
+      alt={name}
+      width={32}
+      height={32}
+      className="rounded-xl"
+    />
+    <span className="text-white/75 duration-400 group-hover:text-white">{title}</span>
+    <span className="ml-auto text-sm font-semibold text-white/50 duration-400 group-hover:text-white">
+      {isInstalled ? 'Connect' : 'Install'}
+    </span>
+  </button>
+);
 
 const WalletModal = () => {
   const { sendTrackingEvent } = useContext(TrackingContext);
 
-  const { currentWallet } = useCurrentWallet();
+  const dAppKit = useDAppKit();
+  const currentWallet = useCurrentWallet();
   const installedWallets = useWallets();
-  const state = useAutoConnectWallet();
 
-  const { isWalletModalOpen, setIsWalletModalOpen } = useAppStateStore();
-  const { termOfServiceAccepted } = usePreferenceStore();
+  const { isWalletModalOpen, setIsWalletModalOpen } = useAppStateStore(
+    ({ isWalletModalOpen, setIsWalletModalOpen }) => ({ isWalletModalOpen, setIsWalletModalOpen }),
+  );
+  const { termOfServiceAccepted } = usePreferenceStore(({ termOfServiceAccepted }) => ({ termOfServiceAccepted }));
 
   const [viewMore, setViewMore] = useState(false);
 
@@ -96,54 +97,29 @@ const WalletModal = () => {
       return bIndex - aIndex;
     }
   });
-  const { mutate: connect } = useConnectWallet({
-    onSuccess: (account) => {
-      const installedWallet = installedWallets.find(({ name }) => name === currentWallet?.name);
 
-      sendTrackingEvent({
-        event: 'wallet',
-        wallet: currentWallet?.name ?? '',
-        installed: !!installedWallet,
-        addresses: account.accounts.map((account) => account.address),
-      });
-    },
-  });
   useEffect(() => {
     setViewMore(false);
   }, [isOpen]);
 
-  // HACK: remove this when Slush fixed their wallet id issue
-  useEffect(() => {
-    try {
-      const suiWallet = installedWallets.find(({ id }) => id === 'com.mystenlabs.suiwallet');
-
-      const { lastConnectedWalletName, lastConnectedAccountAddress } = JSON.parse(
-        localStorage.getItem('sui-dapp-kit:wallet-connection-info') ?? '',
-      ).state;
-
-      if (state !== 'attempted' || !suiWallet || lastConnectedWalletName !== 'com.mystenlabs.suiwallet') {
-        return;
-      }
-      connect({
-        wallet: suiWallet,
-        accountAddress: lastConnectedAccountAddress,
-        silent: true,
-      });
-    } catch {}
-  }, [state, installedWallets]);
-
-  const handleConnect = (wallet: Wallet) => {
-    const installedWallet = installedWallets.find(({ name }) => name === wallet.name);
+  const handleConnect = async (wallet: Wallet) => {
+    const installedWallet = installedWallets.find(({ name }) => name === wallet.name) as UiWallet | undefined;
 
     if (installedWallet) {
-      connect({
-        wallet: installedWallet,
+      const result = await dAppKit.connectWallet({ wallet: installedWallet });
+
+      sendTrackingEvent({
+        event: 'wallet',
+        wallet: currentWallet?.name ?? installedWallet.name,
+        installed: true,
+        addresses: result.accounts.map((account) => account.address),
       });
       setIsWalletModalOpen(false);
     } else {
       window.open(getInstallLink(wallet), '_blank');
     }
   };
+
   return (
     <Dialog open={isOpen}>
       <DialogContent
