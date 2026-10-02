@@ -1,0 +1,21 @@
+# Agent-harness layout lint (AGENTS.md only, no CLAUDE.md, root size, skill mirrors,
+# .codex/config.toml, docs/knowledge-hub). The script is vendored from
+# Bucket-Protocol/waterx-commons harness/lint/check-harness.sh; keep its version header.
+name: Harness
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  check-harness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: check-harness
+        run: bash scripts/agent-hooks/check-harness.sh --root "$GITHUB_WORKSPACE"

@@ -1,0 +1,5 @@
+# .codex/config.toml — commit as-is (trusted projects only; see harness/STANDARD.md §4).
+# Codex concatenates AGENTS.md from the repo root down to the working directory and stops
+# adding files once the combined size reaches project_doc_max_bytes (32 KiB by default),
+# truncating silently. 128 KiB leaves the root plus any nested file far below the cap.
+project_doc_max_bytes = 131072
